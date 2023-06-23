@@ -203,26 +203,49 @@ html {
 /* Manage Presentation */
 
 .wrapper {
-  max-height: 350px;
+  min-height: 350px;
   max-width: 80%;
   background-color: aquamarine;
   padding: 20px;
   margin: auto;
-  margin-top: 25px;
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .childDiv {
-  /* display: flex; */
-  /* justify-content: space-between; */
-  padding: 10px 20px;
+  padding: 5px 20px;
   cursor: move;
   width: 100%;
   height: 50px;
   background: #eee;
   /* margin: 10px 0px; */
 }
+
+.action_td{
+  display: flex;
+  justify-content: space-around;
+}
+.image_preview{
+  width: 60px;
+  height: 100%;
+  cursor: pointer;
+
+}
+.image_preview img{
+  height: 100%;
+  width: 100%;
+}
+.delete_icons{
+  height: 30px;
+  width:30px;
+  cursor: pointer;
+}
+.delete_icons img{
+  height: 100%;
+  width: 100%;
+}
+
 
 /* -------------------------------------- Manage Presentation --------------------------------*/

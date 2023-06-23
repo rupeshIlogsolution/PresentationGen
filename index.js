@@ -7,7 +7,9 @@ const port = process.env.PORT || 5600;
 const app = express();
 const data = require('./data.json')
 let pptData = require('./allPPt.json')
-const { uploadImg, fileData } = require('./multer');
+// const uploadImg = require('./multer');
+const multer = require('multer')
+
 const fs = require('fs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -18,6 +20,21 @@ app.use('/css', express.static(path.resolve(__dirname + '/Public/css')))
 app.use('/js', express.static(path.resolve(__dirname + '/Public/js')))
 app.use('/image', express.static(path.resolve(__dirname + '/Public/image')))
 
+
+let imageArr = []
+const uploadImg = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, "./Public/image/Uploaded")
+        },
+        filename: function (req, file, cb) {
+            let filename = file.originalname + "-" + Date.now() + ".jpg"
+            imageArr.push(filename)
+            cb(null, filename)
+        }
+    })
+
+}).array("presentationImg", 12)
 
 
 
@@ -64,24 +81,33 @@ app.post('/api/verifyuser', (req, res) => {
 app.post("/api/uploadimg", (req, res) => {
     uploadImg(req, res, function (err) {
         if (err) {
-            res.send(err)
+
         }
         else {
-            let arrData = [];
-            if (typeof (req.body.presentationImg) === 'string') {
-                arrData.push(req.body.presentationImg)
-            }
-            else {
-                arrData = [...req.body.presentationImg]
-            }
-            let newObj = { title: req.body.title, presentationImg: arrData }
+            console.log('dnuiuw', imageArr)
+            // console.log(req.files)
+            // console.log(req.body)
+            // console.log(req.body.title)
+            let newObj = { title: req.body.title, presentationImg: imageArr }
             pptData.allPresentation.push(newObj)
             const filepath = path.resolve(__dirname) + '/allPPt.json';
             fs.writeFileSync(filepath, JSON.stringify(pptData))
             res.status(200).send("<script>alert('PPT Created');window.location.href='/dashboard'</script>");
         }
     })
+
 })
+// let arrData = [];
+//             if (typeof (req.body.presentationImg) === 'string') {
+//                 arrData.push(req.body.presentationImg)
+//             }
+//             else {
+//                 arrData = [...req.body.presentationImg]
+//             }
+//             let newObj = { title: req.body.title, presentationImg: arrData }
+//             pptData.allPresentation.push(newObj)
+//             const filepath = path.resolve(__dirname) + '/allPPt.json';
+//             fs.writeFileSync(filepath, JSON.stringify(pptData))
 
 app.get("/api/getAllPresentation", (req, res) => {
     let jsonData;
@@ -93,7 +119,6 @@ app.get("/api/getAllPresentation", (req, res) => {
 app.get("/api/getOnePresentation/:pptid", (req, res) => {
     let bhjh = 0, th;
     pptData.allPresentation.map((i) => {
-        console.log(i)
         if (i.title === req.params.pptid) { bhjh = bhjh + 1; th = i }
     })
 

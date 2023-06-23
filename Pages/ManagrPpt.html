@@ -15,23 +15,26 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-light bg-light px-5">
-        <button class="btn btn-success">Add Image +</button>
+        <button class="btn btn-danger">Add Image +</button>
     </nav>
     <!-- Navbar -->
-    <h4 id="pptTitle"></h4>
+    <h1 id="pptTitle" class="text-center "></h1>
     <div class="wrapper" id="parent_div">
         <table class="table">
             <thead class="">
                 <tr>
                     <th>Sno</th>
                     <th>Image Name</th>
-                    <th>Action</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody id="table_body"></tbody>
         </table>
+        <div class="manage_card_footer d-flex justify-content-between">
+            <small class="text-danger">Drag and Drop to arrange Images. </small>
+            <button class="btn btn-success ">Sava Changes</button>
+        </div>
     </div>
-    <button class="btn btn=success">Sava Changes</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"
         integrity="sha512-Eezs+g9Lq4TCCq0wae01s9PuNWzHYoCMkE97e2qdkYthpI0pzC3UGB03lgEHn2XM85hDOUF6qgqqszs+iXU4UA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

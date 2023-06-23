@@ -7,16 +7,21 @@ let pptid = localStorage.getItem('pptId');
         const jk = await dakbj.json()
         globalVar = jk
         console.log(jk)
-        
+
         document.getElementById('pptTitle').innerHTML = jk.title;
 
         let html = '';
         for (let i = 0; i < jk.presentationImg.length; i++) {
             html = html + "<tr class='childDiv' >";
             for (let j = 0; j < 1; j++) {
-                html = html + `<th scope='row'>${i+1}</t > `;
-                html = html + "<td>hkh</td > ";
-                html = html + '<td>23</td>';
+                html = html + `<th scope='row'>${i + 1}</t > `;
+                html = html + `<td>${jk.presentationImg[i]}</td >`;
+                html = html + `<td class='action_td'>
+                <div class='image_preview'> <img src='../image/Uploaded/${jk.presentationImg[i]}'/></div>
+                <div class='delete_icons'>
+                <img src='https://lh3.googleusercontent.com/G2jzG8a6-GAA4yhxx3XMJfPXsm6_pluyeEWKr9I5swUGF62d2xo_Qg3Kdnu00HAmDQ' alt='Delete Icons'/>
+</div>
+                </td>`;
             }
             html = html + ' </tr>';
         }
