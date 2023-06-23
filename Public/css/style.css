@@ -3,9 +3,11 @@
   padding: 0%;
   box-sizing: border-box;
 }
-html{
+
+html {
   scroll-behavior: smooth;
 }
+
 .main-div {
   height: 100vh;
   width: 98vw;
@@ -29,11 +31,13 @@ html{
   align-items: center; */
   /* position: absolute; */
 }
-.child-div img{
+
+.child-div img {
   height: 100%;
-  width:99%;
+  width: 99%;
   /* border: 2px solid red; */
 }
+
 /* .child-div:nth-child(1) {
   background-color: rgb(186, 136, 136);
 }
@@ -68,7 +72,7 @@ html{
 .slidebox-2 {
   position: fixed;
   right: 5px;
-  width:30px;
+  width: 30px;
   height: 100vh;
   z-index: 1;
   display: flex;
@@ -96,11 +100,13 @@ html{
   text-decoration: none;
   color: #000;
 }
+
 .inner-circle:hover {
   /* background: red; */
   color: red;
   border: 1px solid red;
 }
+
 .inner-circle:active {
   background: red;
   color: #fff;
@@ -113,6 +119,7 @@ html{
     width: 90vw;
   }
 }
+
 @media screen and (max-width:1000px) {
   .child-div {
     height: 78vh;
@@ -123,58 +130,99 @@ html{
 @media screen and (max-width:768px) {
   .child-div {
     height: 55vh;
-    width:98.5vw;
+    width: 98.5vw;
   }
 }
+
 @media screen and (max-width:500px) {
   .child-div {
     height: 50vh;
-    width:98.5vw;
+    width: 98.5vw;
   }
 }
 
 /* ######################## Dashboard ############################ */
 
-.all_presentation{
+.all_presentation {
   height: 100%;
-  width: 90%;
-  border: 2px solid red;
+  max-width: 90%;
+  padding:30px 10px;
+  margin: 2% auto;
+}
+.all_inner_presentation{
   display: grid;
-  padding: 30px;
-  margin:2% auto;
+  grid-template-columns: repeat(4, 2fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-row-gap: 10px;
 }
-.all_presentation .presentaion_link{
+
+
+.all_presentation .presentaion_link {
   text-decoration: none;
+  color: #000;
+  margin: 0px 20px;
 }
-.presentaion{
+
+.presentaion {
   height: 200px;
   width: 250px;
   background-color: #e0e0e0;
   border-radius: 18px;
-  padding:8px 20px;
+  padding: 8px 20px;
   cursor: pointer;
   transition: all 0.3s linear;
+  
 }
-.all_presentation .presentaion .presentaion_title{
+
+.all_presentation .presentaion .presentaion_title {
   font-size: 20px;
   font-weight: 800;
 }
-.all_presentation .presentaion .presentaion_title .presentaion_title_icon{
+
+.all_presentation .presentaion .presentaion_title .presentaion_title_icon {
   height: 20px;
   width: 20px;
 }
-.all_presentation .presentaion .presentation_img{
+
+.all_presentation .presentaion .presentation_img {
   height: 70%;
   background: #fff;
-  width:100%;
+  width: 100%;
   border-radius: 9px;
 }
 
-.all_presentation .presentaion:hover{
+.all_presentation .presentaion:hover {
   background-color: #cac8c8;
-  padding:9.5px 20px;
+  padding: 9.5px 20px;
 
 }
 
 
-/* ############################## Dashoard ###################################### */
+/* -------------------------- Dashoard -------------------------------------------- */
+
+/* Manage Presentation */
+
+.wrapper {
+  max-height: 350px;
+  max-width: 80%;
+  background-color: aquamarine;
+  padding: 20px;
+  margin: auto;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.childDiv {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  padding: 10px 20px;
+  cursor: move;
+  width: 100%;
+  height: 50px;
+  background: #eee;
+  /* margin: 10px 0px; */
+}
+
+/* -------------------------------------- Manage Presentation --------------------------------*/
