@@ -6,7 +6,6 @@ let pptid = localStorage.getItem('pptId');
         const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`)
         const jk = await dakbj.json()
         globalVar = jk
-        console.log(jk)
         document.getElementById('pptTitle').innerHTML = jk.title;
 
         let html = '';
@@ -74,7 +73,6 @@ const handleSaveChanges = async () => {
 
 
 const handleToggleSection = (btnType) => {
-    console.log(btnType)
     if (btnType === 'url') {
         document.getElementById('imgBtn').style.display = 'inline'
         document.getElementById('gene_url_btn').style.display = 'inline'

@@ -20,10 +20,10 @@ app.use('/css', express.static(path.resolve(__dirname + '/Public/css')))
 app.use('/js', express.static(path.resolve(__dirname + '/Public/js')))
 app.use('/image', express.static(path.resolve(__dirname + '/Public/image')))
 
-app.use((req,res,next)=>{
-    console.log(req.url)
-    next();
-})
+// app.use((req,res,next)=>{
+//     console.log(req.url)
+//     next();
+// })
 let imageArr = []
 const uploadImg = multer({
     storage: multer.diskStorage({
@@ -44,7 +44,7 @@ const uploadImg = multer({
 
 // --------------------------- Routes ----------------------
 app.get('/', (req, res) => {
-    res.send('ghjh')
+    res.send('Done')
 })
 app.get('/login', (req, res) => {
     res.status(200).sendFile(path.resolve(__dirname) + '/Pages' + '/Login.html');
@@ -105,15 +105,12 @@ app.post('/api/verifyuser', (req, res) => {
 })
 
 app.post("/api/uploadimg", (req, res) => {
-
     uploadImg(req, res, function (err) {
         if (err) {
-
+            res.status(200).send(err);
         }
         else {
-            // console.log('dnuiuw', imageArr)
             let newObj = { title: req.body.title, presentationImg: imageArr, uuId: [req.body.uuid] }
-            console.log(newObj)
             pptData.allPresentation.push(newObj)
             const filepath = path.resolve(__dirname) + '/allPPt.json';
             fs.writeFileSync(filepath, JSON.stringify(pptData))
