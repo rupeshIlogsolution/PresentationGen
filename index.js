@@ -20,7 +20,10 @@ app.use('/css', express.static(path.resolve(__dirname + '/Public/css')))
 app.use('/js', express.static(path.resolve(__dirname + '/Public/js')))
 app.use('/image', express.static(path.resolve(__dirname + '/Public/image')))
 
-
+app.use((req,res,next)=>{
+    console.log(req.url)
+    next();
+})
 let imageArr = []
 const uploadImg = multer({
     storage: multer.diskStorage({
@@ -64,6 +67,29 @@ app.get('/Presentation/:uuid', (req, res) => {
         }
     })
 })
+app.get('/Presentation/:title/:uuid', (req, res) => {
+    let bhjh = 0, index = 0;
+    for (let i = 1; i <= pptData.allPresentation.length; i++) {
+        if (pptData.allPresentation[i - 1].title === req.params.title) { bhjh = bhjh + 1; index = i }
+    }
+    if (bhjh > 0) {
+        let validteUrl = false;
+        for (let i = 1; i <= pptData.allPresentation[index - 1].uuId.length; i++) {
+            if (pptData.allPresentation[index - 1].uuId[i - 1] === req.params.uuid) {
+                validteUrl = true;
+            }
+        }
+        if (validteUrl) {
+            res.status(200).sendFile(path.resolve(__dirname) + '/Pages' + '/Home.html');
+        }
+        else {
+            res.status(200).send('URL Expired');
+        }
+    }
+    else {
+        res.status(200).send('URL Expired');
+    }
+})
 
 
 // ------------------------- API ---------------------------------------   //
@@ -79,16 +105,15 @@ app.post('/api/verifyuser', (req, res) => {
 })
 
 app.post("/api/uploadimg", (req, res) => {
+
     uploadImg(req, res, function (err) {
         if (err) {
 
         }
         else {
-            console.log('dnuiuw', imageArr)
-            // console.log(req.files)
-            // console.log(req.body)
-            // console.log(req.body.title)
-            let newObj = { title: req.body.title, presentationImg: imageArr }
+            // console.log('dnuiuw', imageArr)
+            let newObj = { title: req.body.title, presentationImg: imageArr, uuId: [req.body.uuid] }
+            console.log(newObj)
             pptData.allPresentation.push(newObj)
             const filepath = path.resolve(__dirname) + '/allPPt.json';
             fs.writeFileSync(filepath, JSON.stringify(pptData))
@@ -97,17 +122,6 @@ app.post("/api/uploadimg", (req, res) => {
     })
 
 })
-// let arrData = [];
-//             if (typeof (req.body.presentationImg) === 'string') {
-//                 arrData.push(req.body.presentationImg)
-//             }
-//             else {
-//                 arrData = [...req.body.presentationImg]
-//             }
-//             let newObj = { title: req.body.title, presentationImg: arrData }
-//             pptData.allPresentation.push(newObj)
-//             const filepath = path.resolve(__dirname) + '/allPPt.json';
-//             fs.writeFileSync(filepath, JSON.stringify(pptData))
 
 app.get("/api/getAllPresentation", (req, res) => {
     let jsonData;
@@ -124,6 +138,22 @@ app.get("/api/getOnePresentation/:pptid", (req, res) => {
 
     if (bhjh > 0) {
         res.status(200).send(th);
+    }
+})
+app.post('/api/updatePpt', (req, res) => {
+    let indexNo;
+    for (let i = 1; i <= pptData.allPresentation.length; i++) {
+        if (pptData.allPresentation[i - 1].title === req.body.title) { indexNo = i; }
+    }
+    if (indexNo) {
+        pptData.allPresentation[indexNo - 1] = req.body
+        const filepath = path.resolve(__dirname) + '/allPPt.json';
+        fs.writeFileSync(filepath, JSON.stringify(pptData))
+        res.status(200).send({ "Message": "Done" })
+    }
+    else {
+        res.status(404).send({ "Message": "Error" })
+
     }
 })
 

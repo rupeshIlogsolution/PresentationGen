@@ -14,27 +14,54 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-light bg-light px-5">
-        <button class="btn btn-danger">Add Image +</button>
+    <nav class="navbar navbar-light bg-light px-5 d-flex">
+       <a href="/dashboard"><button class="btn btn-secondary" id="back_btn">Back</button></a> 
+        <h1 id="pptTitle" class="text-center "></h1>
+        <div class="">
+            <button class="btn btn-danger mx-3" id="urlBtn" onclick="handleToggleSection('url')">Manage URL</button>
+            <button class="btn btn-danger mx-3" id="imgBtn" style="display:none;"
+                onclick="handleToggleSection('image')">Manage Image</button>
+            <button class="btn btn-success" id="add_img_btn">Add Image +</button>
+            <button class="btn btn-success" id="gene_url_btn" style="display: none;">Generate Url</button>
+        </div>
     </nav>
     <!-- Navbar -->
-    <h1 id="pptTitle" class="text-center "></h1>
-    <div class="wrapper" id="parent_div">
-        <table class="table">
-            <thead class="">
-                <tr>
-                    <th>Sno</th>
-                    <th>Image Name</th>
-                    <th class="text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody id="table_body"></tbody>
-        </table>
-        <div class="manage_card_footer d-flex justify-content-between">
-            <small class="text-danger">Drag and Drop to arrange Images. </small>
-            <button class="btn btn-success ">Sava Changes</button>
+
+    <section id="img_sec">
+        <h1 class="text-center ">Manage Images</h1>
+        <div class="wrapper" id="parent_div">
+            <table class="table">
+                <thead class="">
+                    <tr>
+                        <th>Sno</th>
+                        <th>Image Name</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="table_body"></tbody>
+            </table>
+            <div class="manage_card_footer d-flex justify-content-between">
+                <small class="text-danger">Drag and Drop to arrange Images. </small>
+                <button class="btn btn-success" onclick="handleSaveChanges()">Sava Changes</button>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="generate_url" id="url_sec" style="display: none;">
+            <h1 class="text-center ">Manage Url</h1>
+        <div class="wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sno</th>
+                        <th style="user-select: none;">UUID</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="uuid_tbody"></tbody>
+            </table>
+        </div>
+    </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"
         integrity="sha512-Eezs+g9Lq4TCCq0wae01s9PuNWzHYoCMkE97e2qdkYthpI0pzC3UGB03lgEHn2XM85hDOUF6qgqqszs+iXU4UA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
