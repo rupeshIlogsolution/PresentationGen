@@ -1,6 +1,7 @@
 let globalVar;
 (
     async function getAllData() {
+        // const dakbj = await fetch(`http://localhost:2800/api/getAllPresentation`)
         const dakbj = await fetch(`http://192.168.146.169:2800/api/getAllPresentation`)
         const jk = await dakbj.json()
         globalVar = jk
@@ -25,11 +26,11 @@ let globalVar;
 
 const handleClcik = (dc) => {
     localStorage.setItem('pptId', dc);
-    window.location.href='/managePresentation';
+    window.location.href = '/managePresentation';
 }
 
 
-const handleLogout=()=>{
+const handleLogout = () => {
     localStorage.clear();
-    window.location.href='./login'
+    window.location.href = './login'
 }

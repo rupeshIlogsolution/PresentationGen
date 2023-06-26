@@ -28,6 +28,7 @@ html {
   padding: 5% 0%;
 }
 
+
 .child-div img {
   height: 100%;
   width: 99%;
@@ -177,9 +178,13 @@ html {
   width: 100%;
   height: 50px;
   background: #eee;
-  /* margin: 10px 0px; */
 }
-
+.uuidDiv{
+  padding: 5px 20px;
+  width: 100%;
+  height: 50px;
+  background: #eee;
+}
 .action_td{
   display: flex;
   justify-content: space-around;

@@ -5,6 +5,8 @@ let pptid = localStorage.getItem('pptId');
 (
     async function generateable() {
         const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${pptid}`)
+        // const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`)
+        
         const jk = await dakbj.json()
         globalVar = jk
         document.getElementById('pptTitle').innerHTML = jk.title;
@@ -29,11 +31,12 @@ let pptid = localStorage.getItem('pptId');
         let uuIdTable = '';
 
         for (let i = 0; i < jk.uuId.length; i++) {
-            uuIdTable = uuIdTable + `<tr class='childDiv' id=${i}>`;
+            uuIdTable = uuIdTable + `<tr class='uuidDiv' id=${i}>`;
             for (let j = 0; j < 1; j++) {
                 uuIdTable = uuIdTable + `<th scope='row'>${i + 1}</t > `;
-                uuIdTable = uuIdTable + `<td>${jk.uuId[i]}</td >`; 
+                uuIdTable = uuIdTable + `<td>${jk.uuId[i]}</td >`;
                 uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
+                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
                 uuIdTable = uuIdTable + `<td class='action_tr_a '><span class="action_a copy_a" onclick='handleCopyUrl()'> Copy Url</span><span class='action_a delete_a'> Delete </span> </td>`;
             }
             uuIdTable = uuIdTable + ' </tr>';
@@ -52,12 +55,15 @@ const handleSaveChanges = async () => {
     const trdata = document.getElementsByClassName('childDiv');
     let arr = Object.keys(trdata);
     let imageCollection = []
+  
     arr.map((i) => {
         imageCollection.push(globalVar.presentationImg[trdata[i].id])
     });
+
     globalVar.presentationImg = imageCollection;
 
-    const updateData = await fetch('http://192.168.146.169:2800/api/updatePpt', {
+    // const updateData = await fetch('http://localhost:2800/api/updatePpt', {
+        const updateData = await fetch('http://192.168.146.169:2800/api/updatePpt', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -92,19 +98,22 @@ const handleToggleSection = (btnType) => {
 }
 
 
-const handleCopyUrl= async()=>{
+const handleCopyUrl = async () => {
     // let copyText= document.getElementById('ppuurl');
     // // copyText.select();AbstractRange(0,99999);
     // navigator.clipboard.writeText(copyText.innerHTML);
     // alert('URL Copied')
 
-    let text = document.getElementById('ppuurl').innerHTML;
-   
-      try {
-        await navigator.clipboard.writeText(text);
-        alert('Content copied to clipboard');
-      } catch (err) {
-        alert('Failed to copy: ', err);
-      }
-    
+    var selection = window.getSelection();
+    var emailLink = document.querySelector('#ppuurl');
+
+    selection.removeAllRanges();
+    var range = document.createRange();
+    range.selectNode(emailLink);
+    selection.addRange(range);
+
+    navigator.clipboard.writeText(emailLink.textContent)
+        .then(() => alert('URL Copied successful'))
+        .catch(err => alert('URL Copied failed'));
+
 }
