@@ -1,7 +1,7 @@
 (
     async function pptData() {
         let urlTitle = window.location.href.split('/')
-        const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${urlTitle[4]}`)
+        const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${urlTitle[4]}`)
         const pptData = await dakbj.json()
 
         // Generate Images Section

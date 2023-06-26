@@ -1,9 +1,10 @@
+
 let globalVar;
 
 let pptid = localStorage.getItem('pptId');
 (
     async function generateable() {
-        const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`)
+        const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${pptid}`)
         const jk = await dakbj.json()
         globalVar = jk
         document.getElementById('pptTitle').innerHTML = jk.title;
@@ -33,7 +34,6 @@ let pptid = localStorage.getItem('pptId');
                 uuIdTable = uuIdTable + `<th scope='row'>${i + 1}</t > `;
                 uuIdTable = uuIdTable + `<td>${jk.uuId[i]}</td >`; 
                 uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
-                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
                 uuIdTable = uuIdTable + `<td class='action_tr_a '><span class="action_a copy_a" onclick='handleCopyUrl()'> Copy Url</span><span class='action_a delete_a'> Delete </span> </td>`;
             }
             uuIdTable = uuIdTable + ' </tr>';
@@ -57,7 +57,7 @@ const handleSaveChanges = async () => {
     });
     globalVar.presentationImg = imageCollection;
 
-    const updateData = await fetch('http://localhost:2800/api/updatePpt', {
+    const updateData = await fetch('http://192.168.146.169:2800/api/updatePpt', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -92,9 +92,19 @@ const handleToggleSection = (btnType) => {
 }
 
 
-const handleCopyUrl=()=>{
-    let copyText= document.getElementById('ppuurl');
-    // copyText.select();AbstractRange(0,99999);
-    navigator.clipboard.writeText(copyText.innerHTML);
-    alert('URL Copied')
+const handleCopyUrl= async()=>{
+    // let copyText= document.getElementById('ppuurl');
+    // // copyText.select();AbstractRange(0,99999);
+    // navigator.clipboard.writeText(copyText.innerHTML);
+    // alert('URL Copied')
+
+    let text = document.getElementById('ppuurl').innerHTML;
+   
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('Content copied to clipboard');
+      } catch (err) {
+        alert('Failed to copy: ', err);
+      }
+    
 }

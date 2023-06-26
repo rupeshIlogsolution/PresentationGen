@@ -114,6 +114,7 @@ app.post("/api/uploadimg", (req, res) => {
             pptData.allPresentation.push(newObj)
             const filepath = path.resolve(__dirname) + '/allPPt.json';
             fs.writeFileSync(filepath, JSON.stringify(pptData))
+            imageArr = []
             res.status(200).send("<script>alert('PPT Created');window.location.href='/dashboard'</script>");
         }
     })
