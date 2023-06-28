@@ -17,12 +17,9 @@
     <nav class="navbar navbar-light bg-light px-5">
         <h3>Total presentation:- <small id="totalPPtno">0</small></h3>
         <div>
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
-                New Presentation +
-            </button>
-            <button type="button" class="btn btn-danger" onclick="handleLogout()">
-                Logout
-            </button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter"> New
+                Presentation + </button>
+            <button type="button" class="btn btn-danger" onclick="handleLogout()">Logout </button>
         </div>
     </nav>
     <!-- Navbar -->
@@ -53,7 +50,7 @@
                         <div class="form-outline mb-4">
                             <label class="form-label" for="pptFile">Upload Images</label>
                             <input type="file" id="pptFile" class="form-control form-control-lg" name="presentationImg"
-                                multiple />
+                                multiple accept="image/*" />
                         </div>
                         <input type="submit" class="btn btn-success float-right" value="Create +">
                     </form>
@@ -66,7 +63,7 @@
         </div>
     </div>
 
-   
+
     <script src="/js/dashboard.js"></script>
     <!-- Modal -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
