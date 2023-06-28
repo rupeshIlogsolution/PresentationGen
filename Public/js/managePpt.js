@@ -1,15 +1,27 @@
-
 let globalVar;
 
 let pptid = localStorage.getItem('pptId');
 (
     async function generateable() {
-        const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${pptid}`)
-        // const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`)
-        
+        // const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${pptid}`,{
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'userId': localStorage.getItem('userId'),
+        //     }
+        // })
+        const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'userId': localStorage.getItem('userId'),
+            }
+        })
         const jk = await dakbj.json()
+        if (!jk.allPresentation) { window.location.href = '/login'; return 0 }
         globalVar = jk
         document.getElementById('pptTitle').innerHTML = jk.title;
+        document.getElementById('pptTitleinp').value = jk.title;
 
         let html = '';
         for (let i = 0; i < jk.presentationImg.length; i++) {
@@ -19,7 +31,7 @@ let pptid = localStorage.getItem('pptId');
                 html = html + `<td>${jk.presentationImg[i]}</td >`;
                 html = html + `<td class='action_td'>
                 <div class='image_preview'> <img src='../image/Uploaded/${jk.presentationImg[i]}'/></div>
-                <div class='delete_icons'>
+                <div class='delete_icons'  onclick=handleDeleteImg(\'${jk.presentationImg[i]}\')>
                 <img src='https://lh3.googleusercontent.com/G2jzG8a6-GAA4yhxx3XMJfPXsm6_pluyeEWKr9I5swUGF62d2xo_Qg3Kdnu00HAmDQ' alt='Delete Icons'/>
                     </div>
                 </td>`;
@@ -35,14 +47,13 @@ let pptid = localStorage.getItem('pptId');
             for (let j = 0; j < 1; j++) {
                 uuIdTable = uuIdTable + `<th scope='row'>${i + 1}</t > `;
                 uuIdTable = uuIdTable + `<td>${jk.uuId[i]}</td >`;
-                uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
-                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
-                uuIdTable = uuIdTable + `<td class='action_tr_a '><span class="action_a copy_a" onclick='handleCopyUrl()'> Copy Url</span><span class='action_a delete_a'> Delete </span> </td>`;
+                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
+                uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i]}</td >`;
+                uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i]} target='_blank'>URL</a> <span class="action_a copy_a" onclick='handleCopyUrl()' > Copy Url</span><span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i]}\')> Delete </span> </td>`;
             }
             uuIdTable = uuIdTable + ' </tr>';
         }
         document.getElementById('uuid_tbody').innerHTML = uuIdTable;
-
     })();
 
 const dragArea = document.querySelector('#table_body');
@@ -55,15 +66,15 @@ const handleSaveChanges = async () => {
     const trdata = document.getElementsByClassName('childDiv');
     let arr = Object.keys(trdata);
     let imageCollection = []
-  
+
     arr.map((i) => {
         imageCollection.push(globalVar.presentationImg[trdata[i].id])
     });
 
     globalVar.presentationImg = imageCollection;
 
-    // const updateData = await fetch('http://localhost:2800/api/updatePpt', {
-        const updateData = await fetch('http://192.168.146.169:2800/api/updatePpt', {
+    const updateData = await fetch('http://localhost:2800/api/updatePpt', {
+        // const updateData = await fetch('http://192.168.146.169:2800/api/updatePpt', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -98,11 +109,64 @@ const handleToggleSection = (btnType) => {
 }
 
 
+const handleGenerateUuid = async () => {
+    const pptTitleData = { title: globalVar.title }
+    const generateUuid = await fetch('http://localhost:2800/api/addUuId', {
+        // const updateData = await fetch('http://192.168.146.169:2800/api/addUuId', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pptTitleData)
+    })
+    const responseData = await generateUuid.json();
+    if (responseData.status === 'Success') {
+        alert('Uuid Generated');
+        window.location.reload();
+    }
+}
+
+const handleDeleteUuid = async (id) => {
+    const pptTitleData = { title: globalVar.title, uuId: id }
+    const generateUuid = await fetch('http://localhost:2800/api/deleteUuId', {
+        // const updateData = await fetch('http://192.168.146.169:2800/api/deleteUuId', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pptTitleData)
+    })
+    const responseData = await generateUuid.json();
+    if (responseData.status === 'Success') {
+        alert('Uuid Deleted');
+        window.location.reload();
+    }
+}
+const handleDeleteImg = async (img_name) => {
+    const pptTitleData = { title: globalVar.title, img: img_name }
+    const generateUuid = await fetch('http://localhost:2800/api/deleteImage', {
+        // const updateData = await fetch('http://192.168.146.169:2800/api/deleteImage', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pptTitleData)
+    })
+    const responseData = await generateUuid.json();
+    if (responseData.status === 'Success') {
+        alert('Image Deleted');
+        window.location.reload();
+    }
+}
+
+
 const handleCopyUrl = async () => {
+
     // let copyText= document.getElementById('ppuurl');
     // // copyText.select();AbstractRange(0,99999);
     // navigator.clipboard.writeText(copyText.innerHTML);
     // alert('URL Copied')
+
 
     var selection = window.getSelection();
     var emailLink = document.querySelector('#ppuurl');
@@ -112,7 +176,7 @@ const handleCopyUrl = async () => {
     range.selectNode(emailLink);
     selection.addRange(range);
 
-    navigator.clipboard.writeText(emailLink.textContent)
+    window.navigator.clipboard.writeText(emailLink.textContent)
         .then(() => alert('URL Copied successful'))
         .catch(err => alert('URL Copied failed'));
 
