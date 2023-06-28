@@ -45,8 +45,8 @@ let pptid = localStorage.getItem('pptId');
         for (let i = 0; i < jk.uuId.length; i++) {
             uuIdTable = uuIdTable + `<tr class='uuidDiv' id=${i}>`;
             for (let j = 0; j < 1; j++) {
-                uuIdTable = uuIdTable + `<th scope='row'>${i + 1}</t > `;
-                uuIdTable = uuIdTable + `<td>${jk.uuId[i]}</td >`;
+                uuIdTable = uuIdTable + `<th scope='row'>${i + 1}</th> `;
+                uuIdTable = uuIdTable + `<td>${jk.uuId[i]}</td>`;
                 // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
                 uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i]}</td >`;
                 uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i]} target='_blank'>URL</a> <span class="action_a copy_a" onclick='handleCopyUrl()' > Copy Url</span><span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i]}\')> Delete </span> </td>`;
