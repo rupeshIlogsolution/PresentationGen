@@ -4,12 +4,6 @@ let pptid = localStorage.getItem('pptId');
 (
     async function generateable() {
         // const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${pptid}`,{
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'userId': localStorage.getItem('userId'),
-        //     }
-        // })
         const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`, {
             headers: {
                 'Accept': 'application/json',
@@ -18,7 +12,7 @@ let pptid = localStorage.getItem('pptId');
             }
         })
         const jk = await dakbj.json()
-        if (!jk.allPresentation) { window.location.href = '/login'; return 0 }
+        if (!jk.title) { window.location.href = '/login'; return 0 }
         globalVar = jk
         document.getElementById('pptTitle').innerHTML = jk.title;
         document.getElementById('pptTitleinp').value = jk.title;
@@ -46,10 +40,11 @@ let pptid = localStorage.getItem('pptId');
             uuIdTable = uuIdTable + `<tr class='uuidDiv' id=${i}>`;
             for (let j = 0; j < 1; j++) {
                 uuIdTable = uuIdTable + `<th scope='row'>${i + 1}</th> `;
-                uuIdTable = uuIdTable + `<td>${jk.uuId[i]}</td>`;
-                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i]}</td >`;
-                uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i]}</td >`;
-                uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i]} target='_blank'>URL</a> <span class="action_a copy_a" onclick='handleCopyUrl()' > Copy Url</span><span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i]}\')> Delete </span> </td>`;
+                uuIdTable = uuIdTable + `<td>${jk.uuId[i].uuid}</td>`;
+                uuIdTable = uuIdTable + `<td>${jk.uuId[i].cust_name}</td>`;
+                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i].uuid}</td >`;
+                uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i].uuid}</td >`;
+                uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i].uuid} target='_blank'>URL</a> <span class="action_a copy_a" onclick='handleCopyUrl()' > Copy Url</span><span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i].uuid}\')> Delete </span> </td>`;
             }
             uuIdTable = uuIdTable + ' </tr>';
         }
@@ -110,7 +105,9 @@ const handleToggleSection = (btnType) => {
 
 
 const handleGenerateUuid = async () => {
-    const pptTitleData = { title: globalVar.title }
+    const cust_name = document.getElementById('cust_name').value;
+
+    const pptTitleData = { title: globalVar.title, customerName: cust_name }
     const generateUuid = await fetch('http://localhost:2800/api/addUuId', {
         // const updateData = await fetch('http://192.168.146.169:2800/api/addUuId', {
         method: "POST",

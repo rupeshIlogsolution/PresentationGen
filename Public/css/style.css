@@ -39,12 +39,58 @@ html {
   position: fixed;
   right: 5px;
   width: 30px;
-  height: 100vh;
+  /* height: 100vh; */
   z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   user-select: none;
+
+  /* display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 5px; */
+}
+
+#pptid-1 {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+#pptid-2 {
+  grid-area: 2 / 1 / 3 / 2;
+}
+
+#pptid-3 {
+  grid-area: 3 / 1 / 4 / 2;
+}
+
+#pptid-4 {
+  grid-area: 4 / 1 / 5 / 2;
+}
+
+#pptid-5 {
+  grid-area: 5 / 1 / 6 / 2;
+}
+
+#pptid-6 {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+#pptid-7 {
+  grid-area: 2 / 2 / 3 / 3;
+}
+
+#pptid-8 {
+  grid-area: 3 / 2 / 4 / 3;
+}
+
+#pptid-9 {
+  grid-area: 4 / 2 / 5 / 3;
+}
+
+#pptid-10 {
+  grid-area: 5 / 2 / 6 / 3;
 }
 
 .inner-circle {
@@ -106,10 +152,11 @@ html {
 .all_presentation {
   height: 100%;
   max-width: 90%;
-  padding:30px 10px;
+  padding: 30px 10px;
   margin: 2% auto;
 }
-.all_inner_presentation{
+
+.all_inner_presentation {
   display: grid;
   grid-template-columns: repeat(4, 2fr);
   grid-template-rows: repeat(2, 1fr);
@@ -131,12 +178,14 @@ html {
   padding: 8px 20px;
   cursor: pointer;
   transition: all 0.3s linear;
-  
+
 }
 
 .all_presentation .presentaion .presentaion_title {
   font-size: 20px;
   font-weight: 800;
+  display: flex;
+  justify-content: space-between;
 }
 
 .all_presentation .presentaion .presentaion_title .presentaion_title_icon {
@@ -179,44 +228,51 @@ html {
   height: 50px;
   background: #eee;
 }
-.uuidDiv{
+
+.uuidDiv {
   padding: 5px 20px;
   width: 100%;
   height: 50px;
   background: #eee;
 }
-.action_td{
+
+.action_td {
   display: flex;
   justify-content: space-around;
 }
-.image_preview{
+
+.image_preview {
   width: 60px;
   height: 100%;
   cursor: pointer;
 
 }
-.image_preview img{
-  height: 100%;
-  width: 100%;
-}
-.delete_icons{
-  height: 30px;
-  width:30px;
-  cursor: pointer;
-}
-.delete_icons img{
+
+.image_preview img {
   height: 100%;
   width: 100%;
 }
 
-.action_tr_a{
+.delete_icons {
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.delete_icons img {
+  height: 100%;
+  width: 100%;
+}
+
+.action_tr_a {
   display: flex;
   justify-content: space-between;
 }
-.action_a{
+
+.action_a {
   width: 40%;
   height: 100%;
-  color:blue;
+  color: blue;
   text-decoration: underline;
   cursor: pointer;
   font-size: 19px;

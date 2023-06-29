@@ -2,6 +2,7 @@ let globalVar;
 (
     async function getAllData() {
         const dakbj = await fetch(`http://localhost:2800/api/getAllPresentation`,
+            // const dakbj = await fetch(`http://192.168.146.169:2800/api/getAllPresentation`, 
             {
                 headers: {
                     'Accept': 'application/json',
@@ -9,13 +10,7 @@ let globalVar;
                     'userId': localStorage.getItem('userId'),
                 }
             })
-        // const dakbj = await fetch(`http://192.168.146.169:2800/api/getAllPresentation`, {
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'userId': localStorage.getItem('userId'),
-        //     }
-        // })
+
         const jk = await dakbj.json()
 
         if (jk.allPresentation) {
@@ -24,15 +19,16 @@ let globalVar;
             let news = '';
             for (let i = 0; i < jk.allPresentation.length; i++) {
                 let ksk = `\"${jk.allPresentation[i].title}\"`
-                news = news + ` <a id='pptCard' value='${i}' onclick='handleClcik(${ksk})' class='presentaion_link'>
-                    <div class='presentaion'>
+                news = news + ` <a id='pptCard' value='${i}'  class='presentaion_link'>
+                        <div class='presentaion'>
                              <div class='presentaion_title'>
                                    <span class='presentaion_title_icon'>${jk.allPresentation[i].title}</span>
+                                   <span class="material-symbols-outlined text-danger" onclick=handleDeletePPt(\'${jk.allPresentation[i].title}\')>delete</span>
                              </div>
-                             <div class='presentation_img'> </div>
+                             <div class='presentation_img' onclick='handleClcik(${ksk})'> </div>
                                 <small>Total No. of imgage:-${jk.allPresentation[i].presentationImg.length}</small>
                          </div>
-                    </a>`;
+                                 </a>`;
             }
             document.getElementById('allInnerPPtcard').innerHTML = news;
         }
@@ -52,4 +48,27 @@ const handleClcik = (dc) => {
 const handleLogout = () => {
     localStorage.clear();
     window.location.href = './login'
+}
+
+
+const handleDeletePPt = async (pptTitle) => {
+    const dakbj = await fetch(`http://localhost:2800/api/deletePresentation`,
+        // const dakbj = await fetch(`http://192.168.146.169:2800/api/deletePresentation`, 
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'userId': localStorage.getItem('userId'),
+                'pptTitle': pptTitle
+            }
+        })
+
+    const jk = await dakbj.json()
+    if (jk.statusMssg === "success") {
+        alert(jk.Message);
+        window.location.reload();
+    }
+    else {
+        alert(jk.Message);
+    }
 }

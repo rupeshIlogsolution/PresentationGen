@@ -38,7 +38,7 @@ const uploadImg = multer({
         }
     })
 
-}).array("presentationImg", 12)
+}).array("presentationImg", 15)
 
 
 
@@ -76,7 +76,7 @@ app.get('/Presentation/:title/:uuid', (req, res) => {
     if (bhjh > 0) {
         let validteUrl = false;
         for (let i = 1; i <= pptData.allPresentation[index - 1].uuId.length; i++) {
-            if (pptData.allPresentation[index - 1].uuId[i - 1] === req.params.uuid) {
+            if (pptData.allPresentation[index - 1].uuId[i - 1].uuid === req.params.uuid) {
                 validteUrl = true;
             }
         }
@@ -108,15 +108,25 @@ app.post('/api/verifyuser', (req, res) => {
 app.post("/api/uploadimg", (req, res) => {
     uploadImg(req, res, function (err) {
         if (err) {
-            res.status(200).send(err);
+            res.status(200).send("<script>alert('Maximum 15 images are Uploaded at a time.');window.location.href='/dashboard'</script>");
         }
         else {
-            let newObj = { title: req.body.title, presentationImg: imageArr, uuId: [req.body.uuid] }
-            pptData.allPresentation.push(newObj)
-            const filepath = path.resolve(__dirname) + '/allPPt.json';
-            fs.writeFileSync(filepath, JSON.stringify(pptData))
-            imageArr = []
-            res.status(200).send("<script>alert('PPT Created');window.location.href='/dashboard'</script>");
+            let pptIndex;
+            for (let i = 1; i <= pptData.allPresentation.length; i++) {
+                if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
+            }
+            if (!pptIndex) {
+                let newUuid = uuidv4();
+                let newObj = { "title": req.body.title, "presentationImg": imageArr, "uuId": [{ "cust_name": 'default', "uuid": newUuid }] }
+                pptData.allPresentation.push(newObj)
+                const filepath = path.resolve(__dirname) + '/allPPt.json';
+                fs.writeFileSync(filepath, JSON.stringify(pptData))
+                imageArr = []
+                res.status(200).send("<script>alert('PPT Created');window.location.href='/dashboard'</script>");
+            }
+            else {
+                res.status(400).send("<script>alert('This Presentation is Already Exist.');window.location.href='/dashboard'</script>");
+            }
         }
     })
 
@@ -125,7 +135,7 @@ app.post("/api/uploadimg", (req, res) => {
 app.post("/api/addimg", (req, res) => {
     uploadImg(req, res, function (err) {
         if (err) {
-            res.status(200).send(err);
+            res.status(200).send("<script>alert('Maximum 15 images are Uploaded at a time.');window.location.href='/managePresentation'</script>");
         }
         else {
             let pptIndex;
@@ -167,7 +177,7 @@ app.get("/api/getAllPresentation", (req, res) => {
 app.get("/api/getOnePresentation/:pptid", (req, res) => {
     let validUser = false;
     for (let i = 1; i <= data.userData.length; i++) {
-        if (req.headers.userid === data.userData[i - 1].useId) { validUser = true }
+        if (req.headers.userid === data.userData[i - 1].useId || req.headers.userid === 'default') { validUser = true }
     }
     if (validUser) {
         let bhjh = 0, th;
@@ -182,6 +192,35 @@ app.get("/api/getOnePresentation/:pptid", (req, res) => {
         res.status(401).send({ Message: 'Unauthorized User' });
     }
 })
+app.get("/api/deletePresentation/", (req, res) => {
+    let validUser = false;
+    for (let i = 1; i <= data.userData.length; i++) {
+        if (req.headers.userid === data.userData[i - 1].useId || req.headers.userid === 'default') { validUser = true }
+    }
+    if (validUser) {
+        let pptIndex;
+        for (let i = 1; i <= pptData.allPresentation.length; i++) {
+            if (req.headers.ppttitle === pptData.allPresentation[i - 1].title) { pptIndex = i }
+        }
+        if (pptIndex) {
+            console.log(pptIndex)
+            let tempPptJson = pptData;
+            tempPptJson.allPresentation.splice((pptIndex - 1), 1);
+
+            const filepath = path.resolve(__dirname) + '/allPPt.json';
+            fs.writeFileSync(filepath, JSON.stringify(tempPptJson))
+            res.status(200).send({ statusMssg: 'success', Message: 'Presentation Deleted' });
+
+        }
+        else {
+            res.status(400).send("<script>alert('Invalid ppt');window.location.href='/dashboard'</script>");
+        }
+    }
+    else {
+        res.status(401).send({ Message: 'Unauthorized User' });
+    }
+})
+
 app.post("/api/deleteImage", (req, res) => {
     let pptIndex;
     for (let i = 1; i <= pptData.allPresentation.length; i++) {
@@ -200,14 +239,16 @@ app.post("/api/deleteImage", (req, res) => {
     }
 })
 app.post("/api/addUuId", (req, res) => {
+
     let pptIndex;
     for (let i = 1; i <= pptData.allPresentation.length; i++) {
         if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
     }
     if (pptIndex) {
         let newUuid = uuidv4();
-        let newArr = [...pptData.allPresentation[pptIndex - 1].uuId, newUuid];
-        pptData.allPresentation[pptIndex - 1].uuId = newArr
+        let newArr = [...pptData.allPresentation[pptIndex - 1].uuId, { "cust_name": req.body.customerName, "uuid": newUuid }];
+        pptData.allPresentation[pptIndex - 1].uuId = newArr;
+
         const filepath = path.resolve(__dirname) + '/allPPt.json';
         fs.writeFileSync(filepath, JSON.stringify(pptData))
         res.status(200).send({ status: 'Success' });
@@ -222,8 +263,12 @@ app.post("/api/deleteUuId", (req, res) => {
         if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
     }
     if (pptIndex) {
+        let uuidIndex;
         let newArr = [...pptData.allPresentation[pptIndex - 1].uuId]
-        newArr.splice(newArr.indexOf(req.body.uuId), 1);
+        for (let j = 0; j < pptData.allPresentation[pptIndex - 1].uuId.length; j++) {
+            if (req.body.uuId === pptData.allPresentation[pptIndex - 1].uuId[j].uuid) { uuidIndex = j }
+        }
+        newArr.splice(uuidIndex, 1);
         pptData.allPresentation[pptIndex - 1].uuId = newArr
         const filepath = path.resolve(__dirname) + '/allPPt.json';
         fs.writeFileSync(filepath, JSON.stringify(pptData))
