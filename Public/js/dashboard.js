@@ -1,8 +1,8 @@
 let globalVar;
 (
     async function getAllData() {
-        const dakbj = await fetch(`http://localhost:2800/api/getAllPresentation`,
-            // const dakbj = await fetch(`http://192.168.146.169:2800/api/getAllPresentation`, 
+        // const dakbj = await fetch(`http://localhost:2800/api/getAllPresentation`,
+            const dakbj = await fetch(`http://192.168.146.169:2800/api/getAllPresentation`, 
             {
                 headers: {
                     'Accept': 'application/json',
@@ -18,14 +18,14 @@ let globalVar;
             document.getElementById('totalPPtno').innerHTML = jk.allPresentation.length;
             let news = '';
             for (let i = 0; i < jk.allPresentation.length; i++) {
-                let ksk = `\"${jk.allPresentation[i].title}\"`
+                
                 news = news + ` <a id='pptCard' value='${i}'  class='presentaion_link'>
                         <div class='presentaion'>
                              <div class='presentaion_title'>
-                                   <span class='presentaion_title_icon'>${jk.allPresentation[i].title}</span>
-                                   <span class="material-symbols-outlined text-danger" onclick=handleDeletePPt(\'${jk.allPresentation[i].title}\')>delete</span>
+                                   <span class='presentaion_title_icon' title='${jk.allPresentation[i].title}'>${jk.allPresentation[i].title}</span>
+                                   <span class="material-symbols-outlined text-danger" onclick=handleDeletePPt(\'${jk.allPresentation[i].pptId}\')>delete</span>
                              </div>
-                             <div class='presentation_img' onclick='handleClcik(${ksk})'> </div>
+                             <div class='presentation_img' onclick=handleClcik(\'${jk.allPresentation[i].pptId}\')> </div>
                                 <small>Total No. of imgage:-${jk.allPresentation[i].presentationImg.length}</small>
                          </div>
                                  </a>`;
@@ -51,15 +51,15 @@ const handleLogout = () => {
 }
 
 
-const handleDeletePPt = async (pptTitle) => {
-    const dakbj = await fetch(`http://localhost:2800/api/deletePresentation`,
-        // const dakbj = await fetch(`http://192.168.146.169:2800/api/deletePresentation`, 
+const handleDeletePPt = async (pptId) => {
+    // const dakbj = await fetch(`http://localhost:2800/api/deletePresentation`,
+        const dakbj = await fetch(`http://192.168.146.169:2800/api/deletePresentation`, 
         {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'userId': localStorage.getItem('userId'),
-                'pptTitle': pptTitle
+                'pptId': pptId
             }
         })
 

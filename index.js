@@ -38,7 +38,7 @@ const uploadImg = multer({
         }
     })
 
-}).array("presentationImg", 15)
+}).array("presentationImg", 40)
 
 
 
@@ -68,10 +68,10 @@ app.get('/Presentation/:uuid', (req, res) => {
         }
     })
 })
-app.get('/Presentation/:title/:uuid', (req, res) => {
+app.get('/Presentation/:pptId/:uuid', (req, res) => {
     let bhjh = 0, index = 0;
     for (let i = 1; i <= pptData.allPresentation.length; i++) {
-        if (pptData.allPresentation[i - 1].title === req.params.title) { bhjh = bhjh + 1; index = i }
+        if (pptData.allPresentation[i - 1].pptId === req.params.pptId) { bhjh = bhjh + 1; index = i }
     }
     if (bhjh > 0) {
         let validteUrl = false;
@@ -108,7 +108,7 @@ app.post('/api/verifyuser', (req, res) => {
 app.post("/api/uploadimg", (req, res) => {
     uploadImg(req, res, function (err) {
         if (err) {
-            res.status(200).send("<script>alert('Maximum 15 images are Uploaded at a time.');window.location.href='/dashboard'</script>");
+            res.status(200).send("<script>alert('Maximum 35 images are Uploaded at a time.');window.location.href='/dashboard'</script>");
         }
         else {
             let pptIndex;
@@ -117,7 +117,8 @@ app.post("/api/uploadimg", (req, res) => {
             }
             if (!pptIndex) {
                 let newUuid = uuidv4();
-                let newObj = { "title": req.body.title, "presentationImg": imageArr, "uuId": [{ "cust_name": 'default', "uuid": newUuid }] }
+                let randomId = (req.body.title.substring(0, 3)).toUpperCase() + Math.floor(Math.random() * 10000);
+                let newObj = { pptId: randomId, "title": req.body.title, "presentationImg": imageArr, "uuId": [{ "cust_name": 'default', "uuid": newUuid }] }
                 pptData.allPresentation.push(newObj)
                 const filepath = path.resolve(__dirname) + '/allPPt.json';
                 fs.writeFileSync(filepath, JSON.stringify(pptData))
@@ -125,7 +126,7 @@ app.post("/api/uploadimg", (req, res) => {
                 res.status(200).send("<script>alert('PPT Created');window.location.href='/dashboard'</script>");
             }
             else {
-                res.status(400).send("<script>alert('This Presentation is Already Exist.');window.location.href='/dashboard'</script>");
+                res.status(400).send("<script>alert('This Presentation Title is Already Exist.');window.location.href='/dashboard'</script>");
             }
         }
     })
@@ -135,12 +136,12 @@ app.post("/api/uploadimg", (req, res) => {
 app.post("/api/addimg", (req, res) => {
     uploadImg(req, res, function (err) {
         if (err) {
-            res.status(200).send("<script>alert('Maximum 15 images are Uploaded at a time.');window.location.href='/managePresentation'</script>");
+            res.status(200).send("<script>alert('Maximum 35 images are Uploaded at a time.');window.location.href='/managePresentation'</script>");
         }
         else {
             let pptIndex;
             for (let i = 1; i <= pptData.allPresentation.length; i++) {
-                if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
+                if (req.body.title === pptData.allPresentation[i - 1].pptId) { pptIndex = i }
             }
             if (pptIndex) {
                 let newArr = [...pptData.allPresentation[pptIndex - 1].presentationImg, ...imageArr];
@@ -182,7 +183,7 @@ app.get("/api/getOnePresentation/:pptid", (req, res) => {
     if (validUser) {
         let bhjh = 0, th;
         pptData.allPresentation.map((i) => {
-            if (i.title === req.params.pptid) { bhjh = bhjh + 1; th = i }
+            if (i.pptId === req.params.pptid) { bhjh = bhjh + 1; th = i }
         })
         if (bhjh > 0) {
             res.status(200).send(th);
@@ -200,13 +201,11 @@ app.get("/api/deletePresentation/", (req, res) => {
     if (validUser) {
         let pptIndex;
         for (let i = 1; i <= pptData.allPresentation.length; i++) {
-            if (req.headers.ppttitle === pptData.allPresentation[i - 1].title) { pptIndex = i }
+            if (req.headers.pptid === pptData.allPresentation[i - 1].pptId) { pptIndex = i }
         }
         if (pptIndex) {
-            console.log(pptIndex)
             let tempPptJson = pptData;
             tempPptJson.allPresentation.splice((pptIndex - 1), 1);
-
             const filepath = path.resolve(__dirname) + '/allPPt.json';
             fs.writeFileSync(filepath, JSON.stringify(tempPptJson))
             res.status(200).send({ statusMssg: 'success', Message: 'Presentation Deleted' });
@@ -224,7 +223,7 @@ app.get("/api/deletePresentation/", (req, res) => {
 app.post("/api/deleteImage", (req, res) => {
     let pptIndex;
     for (let i = 1; i <= pptData.allPresentation.length; i++) {
-        if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
+        if (req.body.pptId === pptData.allPresentation[i - 1].pptId) { pptIndex = i }
     }
     if (pptIndex) {
         let newArr = [...pptData.allPresentation[pptIndex - 1].presentationImg]
@@ -242,7 +241,7 @@ app.post("/api/addUuId", (req, res) => {
 
     let pptIndex;
     for (let i = 1; i <= pptData.allPresentation.length; i++) {
-        if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
+        if (req.body.pptId === pptData.allPresentation[i - 1].pptId) { pptIndex = i }
     }
     if (pptIndex) {
         let newUuid = uuidv4();
@@ -260,7 +259,7 @@ app.post("/api/addUuId", (req, res) => {
 app.post("/api/deleteUuId", (req, res) => {
     let pptIndex;
     for (let i = 1; i <= pptData.allPresentation.length; i++) {
-        if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
+        if (req.body.pptId === pptData.allPresentation[i - 1].pptId) { pptIndex = i }
     }
     if (pptIndex) {
         let uuidIndex;

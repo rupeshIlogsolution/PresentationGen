@@ -3,8 +3,8 @@ let globalVar;
 let pptid = localStorage.getItem('pptId');
 (
     async function generateable() {
-        // const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${pptid}`,{
-        const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`, {
+        const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${pptid}`, {
+            // const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${pptid}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ let pptid = localStorage.getItem('pptId');
         if (!jk.title) { window.location.href = '/login'; return 0 }
         globalVar = jk
         document.getElementById('pptTitle').innerHTML = jk.title;
-        document.getElementById('pptTitleinp').value = jk.title;
+        document.getElementById('pptTitleinp').value = jk.pptId;
 
         let html = '';
         for (let i = 0; i < jk.presentationImg.length; i++) {
@@ -42,9 +42,11 @@ let pptid = localStorage.getItem('pptId');
                 uuIdTable = uuIdTable + `<th scope='row'>${i + 1}</th> `;
                 uuIdTable = uuIdTable + `<td>${jk.uuId[i].uuid}</td>`;
                 uuIdTable = uuIdTable + `<td>${jk.uuId[i].cust_name}</td>`;
-                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/AWL/${jk.uuId[i].uuid}</td >`;
-                uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i].uuid}</td >`;
-                uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://localhost:2800/Presentation/${jk.title}/${jk.uuId[i].uuid} target='_blank'>URL</a> <span class="action_a copy_a" onclick='handleCopyUrl()' > Copy Url</span><span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i].uuid}\')> Delete </span> </td>`;
+                uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://192.168.146.169:2800/Presentation/${jk.pptId}/${jk.uuId[i].uuid}</td >`;
+                // uuIdTable = uuIdTable + `<td class='d-none' id='ppuurl'>http://localhost:2800/Presentation/${jk.pptId}/${jk.uuId[i].uuid}</td >`;
+                // uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://localhost:2800/Presentation/${jk.pptId}/${jk.uuId[i].uuid} target='_blank'>URL</a> <span class="action_a copy_a" onclick='handleCopyUrl()' > Copy Url</span><span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i].uuid}\')> Delete </span> </td>`;
+                uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://192.168.146.169:2800/Presentation/${jk.pptId}/${jk.uuId[i].uuid} target='_blank'>URL</a> <span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i].uuid}\')> Delete </span> </td>`;
+                // uuIdTable = uuIdTable + `<td class='action_tr_a '><a href=http://192.168.146.169:2800/Presentation/${jk.pptId}/${jk.uuId[i].uuid} target='_blank'>URL</a> <span class="action_a copy_a" onclick='handleCopyUrl()' > Copy Url</span><span class='action_a delete_a' onclick=handleDeleteUuid(\'${jk.uuId[i].uuid}\')> Delete </span> </td>`;
             }
             uuIdTable = uuIdTable + ' </tr>';
         }
@@ -68,8 +70,8 @@ const handleSaveChanges = async () => {
 
     globalVar.presentationImg = imageCollection;
 
-    const updateData = await fetch('http://localhost:2800/api/updatePpt', {
-        // const updateData = await fetch('http://192.168.146.169:2800/api/updatePpt', {
+    // const updateData = await fetch('http://localhost:2800/api/updatePpt', {
+    const updateData = await fetch('http://192.168.146.169:2800/api/updatePpt', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -107,9 +109,9 @@ const handleToggleSection = (btnType) => {
 const handleGenerateUuid = async () => {
     const cust_name = document.getElementById('cust_name').value;
 
-    const pptTitleData = { title: globalVar.title, customerName: cust_name }
-    const generateUuid = await fetch('http://localhost:2800/api/addUuId', {
-        // const updateData = await fetch('http://192.168.146.169:2800/api/addUuId', {
+    const pptTitleData = { pptId: globalVar.pptId, customerName: cust_name }
+    // const generateUuid = await fetch('http://localhost:2800/api/addUuId', {
+    const generateUuid = await fetch('http://192.168.146.169:2800/api/addUuId', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -124,9 +126,9 @@ const handleGenerateUuid = async () => {
 }
 
 const handleDeleteUuid = async (id) => {
-    const pptTitleData = { title: globalVar.title, uuId: id }
-    const generateUuid = await fetch('http://localhost:2800/api/deleteUuId', {
-        // const updateData = await fetch('http://192.168.146.169:2800/api/deleteUuId', {
+    const pptTitleData = { pptId: globalVar.pptId, uuId: id }
+    // const generateUuid = await fetch('http://localhost:2800/api/deleteUuId', {
+    const generateUuid = await fetch('http://192.168.146.169:2800/api/deleteUuId', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -140,9 +142,9 @@ const handleDeleteUuid = async (id) => {
     }
 }
 const handleDeleteImg = async (img_name) => {
-    const pptTitleData = { title: globalVar.title, img: img_name }
-    const generateUuid = await fetch('http://localhost:2800/api/deleteImage', {
-        // const updateData = await fetch('http://192.168.146.169:2800/api/deleteImage', {
+    const pptTitleData = { pptId: globalVar.pptId, img: img_name }
+    // const generateUuid = await fetch('http://localhost:2800/api/deleteImage', {
+    const generateUuid = await fetch('http://192.168.146.169:2800/api/deleteImage', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

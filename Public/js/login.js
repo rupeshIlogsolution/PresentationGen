@@ -3,8 +3,8 @@ const handleLogin = async () => {
     const pass = document.getElementById('password').value;
 
     const data = { userid, pass }
-    // const response = await fetch(`http://192.168.146.169:2800/api/verifyuser`, {
-        const response = await fetch(`http://localhost:2800/api/verifyuser`, {
+    const response = await fetch(`http://192.168.146.169:2800/api/verifyuser`, {
+        // const response = await fetch(`http://localhost:2800/api/verifyuser`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
