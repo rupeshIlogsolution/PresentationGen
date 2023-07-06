@@ -1,8 +1,10 @@
 let globalVar;
+// let urlVal='http://localhost:2800';
+let urlVal='https://presentation.awlinternational.com';
 (
     async function getAllData() {
-        // const dakbj = await fetch(`http://localhost:2800/api/getAllPresentation`,
-            const dakbj = await fetch(`http://192.168.146.169:2800/api/getAllPresentation`, 
+        const dakbj = await fetch(`${urlVal}/api/getAllPresentation`,
+            // const dakbj = await fetch(`https://presentation.awlinternational.com/api/getAllPresentation`, 
             {
                 headers: {
                     'Accept': 'application/json',
@@ -52,8 +54,8 @@ const handleLogout = () => {
 
 
 const handleDeletePPt = async (pptId) => {
-    // const dakbj = await fetch(`http://localhost:2800/api/deletePresentation`,
-        const dakbj = await fetch(`http://192.168.146.169:2800/api/deletePresentation`, 
+    const dakbj = await fetch(`${urlVal}/api/deletePresentation`,
+        // const dakbj = await fetch(`https://presentation.awlinternational.com/api/deletePresentation`, 
         {
             headers: {
                 'Accept': 'application/json',
