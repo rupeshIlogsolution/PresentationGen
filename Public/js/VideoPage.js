@@ -1,5 +1,5 @@
-let urlVal = 'http://localhost:2800';
-// let urlVal='https://presentation.awlinternational.com';
+// let urlVal = 'http://localhost:2800';
+let urlVal='https://presentation.awlinternational.com';
 
 
 // It should be the same transition time of the sections
