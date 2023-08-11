@@ -1,10 +1,9 @@
 let globalVar;
-let urlVal='http://localhost:2800';
+let urlVal = 'http://localhost:2800';
 // let urlVal='https://presentation.awlinternational.com';
 (
     async function getAllData() {
         const dakbj = await fetch(`${urlVal}/api/getAllPresentation`,
-            // const dakbj = await fetch(`https://presentation.awlinternational.com/api/getAllPresentation`, 
             {
                 headers: {
                     'Accept': 'application/json',
@@ -14,13 +13,12 @@ let urlVal='http://localhost:2800';
             })
 
         const jk = await dakbj.json()
-
         if (jk.allPresentation) {
             globalVar = jk
             document.getElementById('totalPPtno').innerHTML = jk.allPresentation.length;
             let news = '';
             for (let i = 0; i < jk.allPresentation.length; i++) {
-                
+
                 news = news + ` <a id='pptCard' value='${i}'  class='presentaion_link'>
                         <div class='presentaion'>
                              <div class='presentaion_title'>
@@ -40,22 +38,18 @@ let urlVal='http://localhost:2800';
     }
 )()
 
-
 const handleClcik = (dc) => {
     localStorage.setItem('pptId', dc);
     window.location.href = '/managePresentation';
 }
-
 
 const handleLogout = () => {
     localStorage.clear();
     window.location.href = './login'
 }
 
-
 const handleDeletePPt = async (pptId) => {
     const dakbj = await fetch(`${urlVal}/api/deletePresentation`,
-        // const dakbj = await fetch(`https://presentation.awlinternational.com/api/deletePresentation`, 
         {
             headers: {
                 'Accept': 'application/json',

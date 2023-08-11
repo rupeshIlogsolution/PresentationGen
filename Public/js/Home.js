@@ -14,16 +14,14 @@ sectionStickUnit.style.top = (window.screen.height / 2) + 'px';
 
 let startFlag = true;
 let initialScroll = window.scrollY;
-let qty = 1,
-    main = null,
-    next = null;
+let qty = 1, main = null, next = null;
+
 // Add child elements in .section-stick as number of sections exist
 let count = 0;
 (
     async function pptData() {
         let urlTitle = window.location.href.split('/')
         const dakbj = await fetch(`${urlVal}/api/getOnePresentation/${urlTitle[4]}`, {
-            // const dakbj = await fetch(`https://presentation.awlinternational.com/api/getOnePresentation/${urlTitle[4]}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -68,7 +66,6 @@ window.onscroll = () => {
                 next.style.transform = 'translateY(0)';
                 qty++;
                 sectionStickPerUnit = sectionStickPerUnit - 45;
-                console.log(sectionStickPerUnit)
                 sectionStickUnit.style.top = sectionStickPerUnit + 'px';
             } else if (!scrollDown && qty > 1) {
                 main = document.querySelector(`section#s${qty - 1}`);
@@ -79,10 +76,10 @@ window.onscroll = () => {
                 sectionStickPerUnit = sectionStickPerUnit + 45;
                 sectionStickUnit.style.top = sectionStickPerUnit + 'px';
             }
-            if(qty==1){
+            if (qty == 1) {
                 document.querySelector('.pptScrollTop').style.transform = 'translateY(200%)'
             }
-            else{
+            else {
                 document.querySelector('.pptScrollTop').style.transform = 'translateY(0%)'
             }
         }
@@ -113,7 +110,7 @@ function handleScrollToTp() {
         }
     }
     if (qty == 1) {
-            document.querySelector('.pptScrollTop').style.transform = 'translateY(200%)'
+        document.querySelector('.pptScrollTop').style.transform = 'translateY(200%)'
     }
 
 }
@@ -125,27 +122,10 @@ const handleClickStick = (prop_id) => {
     let id = Number(prop_id)
 
     if (id > qty) {
-        // let now = document.querySelector(`section#s${qty}`);
-        // now.style.transform = 'translateY(-100vh)';
-        //     let current = document.querySelector(`section#s${id}`);
-        //     current.style.transform = 'translateY(0vh)';
-        // document.getElementById(`s${id}`).style.transform = 'translateY(0vh)';
-        // for(let i=id;i>sectionsQty;i--){
-        //     document.getElementById(`s${i}`).style.transform = 'translateY(-100vh)';
-        // }
         sectionStickPerUnit = sectionStickPerUnit - ((id - qty) * 45);
         sectionStickUnit.style.top = sectionStickPerUnit + 'px';
     }
     else {
-        // let now = document.querySelector(`section#s${qty}`);
-        // now.style.transform = 'translateY(100vh)';
-        //     let current = document.querySelector(`section#s${id}`);
-        //     current.style.transform = 'translateY(0vh)';
-        // document.getElementById(`s${id}`).style.transform = 'translateY(0vh)';
-        // for(let i=id+1;i<=sectionsQty;i++){
-        //     console.log(`document.getElementById(s${i})`)
-        //     document.getElementById(`s${i}`).style.transform = 'translateY(100vh)';
-        // }
         sectionStickPerUnit = sectionStickPerUnit + ((qty - id) * 45);
         sectionStickUnit.style.top = sectionStickPerUnit + 'px';
     }
@@ -158,217 +138,17 @@ const handleClickStick = (prop_id) => {
         }
         else if (i > id) {
             document.querySelector(`section#s${i}`).style.transform = 'translateY(100vh)';
-            
+
         }
         else if (i < id) {
             document.querySelector(`section#s${i}`).style.transform = 'translateY(-100vh)';
         }
     }
     qty = id;
-    if(qty==1){
+    if (qty == 1) {
         document.querySelector('.pptScrollTop').style.transform = 'translateY(200%)'
     }
-    else{
+    else {
         document.querySelector('.pptScrollTop').style.transform = 'translateY(0%)'
     }
 }
-
-
-
-
-
-// Done---------------------------------
-// It should be the same transition time of the sections
-// const body = document.querySelector('body');
-// let sectionsQty;
-// let sectionStick = document.querySelector('.stick_container');
-// let sectionStickMajor = document.querySelector('.section-stick');
-// sectionStickMajor.style.height = window.screen.height + 'px'
-// const sectionStickUnit = document.querySelector('.stick_container');
-// sectionStickUnit.style.position = 'absolute';
-// sectionStickUnit.style.top = (window.screen.height / 2) + 'px';
-
-// let startFlag = true;
-// let initialScroll = window.scrollY;
-// let qty = 1,
-//     main = null,
-//     next = null;
-// // Add child elements in .section-stick as number of sections exist
-// let count = 0;
-// (
-//     async function pptData() {
-//         let urlTitle = window.location.href.split('/')
-//         const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${urlTitle[4]}`, {
-//             // const dakbj = await fetch(`http://192.168.146.169:2800/api/getOnePresentation/${urlTitle[4]}`, {
-//             headers: {
-//                 'Accept': 'application/json',
-//                 'Content-Type': 'application/json',
-//                 'userId': 'default',
-//             }
-//         })
-//         const pptData = await dakbj.json()
-
-//         for (let i = 0; i < pptData.presentationImg.length; i++) {
-//             var div = document.createElement('section');
-//             div.id = `s${i + 1}`
-//             div.innerHTML = `<img src='/image/Uploaded/${pptData.presentationImg[i]}'/> `;
-//             document.querySelector('.layout').appendChild(div);
-//         }
-
-//         sectionsQty = pptData.presentationImg.length;
-//         Array(sectionsQty)
-//             .fill()
-//             .forEach(() => {
-//                 sectionStick.innerHTML =
-//                     sectionStick.innerHTML + `<div class="stick" onclick="handleClickStick(\'${count + 1}\')">${count + 1}</div>`;
-//                 count++;
-//             });
-
-//     }
-// )()
-
-// let sectionStickPerUnit = (window.screen.height / 2);
-
-// window.onscroll = () => {
-//     if (startFlag) {
-//         const scrollDown = window.scrollY >= initialScroll;
-//         const scrollLimit = qty >= 1 && qty <= sectionsQty;
-//         if (scrollLimit) {
-//             body.style.overflowY = 'hidden';
-//             if (scrollDown && qty < sectionsQty) {
-//                 main = document.querySelector(`section#s${qty}`);
-//                 next = document.querySelector(`section#s${qty + 1}`);
-//                 main.style.transform = 'translateY(-100vh)';
-//                 next.style.transform = 'translateY(0)';
-//                 qty++;
-//                 sectionStickPerUnit = sectionStickPerUnit - 45
-//                 sectionStickUnit.style.top = sectionStickPerUnit + 'px';
-
-//             } else if (!scrollDown && qty > 1) {
-//                 main = document.querySelector(`section#s${qty - 1}`);
-//                 next = document.querySelector(`section#s${qty}`);
-//                 main.style.transform = 'translateY(0)';
-//                 next.style.transform = 'translateY(100vh)';
-//                 qty--;
-//                 sectionStickPerUnit = sectionStickPerUnit + 45
-//                 sectionStickUnit.style.top = sectionStickPerUnit + 'px';
-//             }
-//         }
-//         setTimeout(() => {
-//             initialScroll = window.scrollY;
-//             startFlag = true;
-//             body.style.overflowY = 'scroll';
-//         }, 600);
-//         startFlag = false;
-//     }
-//     window.scroll(0, window.screen.height);
-// };
-
-// const handleClickStick = (id) => {
-//     console.log('wjfkje ', id, qty)
-
-//     if (id > qty) {
-//         let now = document.querySelector(`section#s${qty}`);
-//         now.style.transform = 'translateY(-100vh)';
-//         let nlmain = document.querySelector(`section#s${id}`);
-//         nlmain.style.transform = 'translateY(0vh)';
-//     }
-//     else {
-//         let now = document.querySelector(`section#s${qty}`);
-//         now.style.transform = 'translateY(100vh)';
-//         let nextdc = document.querySelector(`section#s${id}`);
-//         nextdc.style.transform = 'translateY(0vh)';
-//     }
-//     qty = id;
-// }
-
-// Done----------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// (
-//     async function pptData() {
-//         let urlTitle = window.location.href.split('/')
-//         const dakbj = await fetch(`http://localhost:2800/api/getOnePresentation/${urlTitle[4]}`,{
-//             headers: {
-//                 'Accept': 'application/json',
-//                 'Content-Type': 'application/json',
-//                 'userId': 'default',
-//             }
-//         })
-//         const pptData = await dakbj.json()
-
-//         let htmlTag = '', aTag = '';
-//         for (let i = 0; i < pptData.presentationImg.length; i++) {
-//             htmlTag = htmlTag + `<div id="pptid-${i + 1}" class="child-div">
-//             <img src='/image/Uploaded/${pptData.presentationImg[i]}'/> 
-//             </div>`
-//             aTag = aTag + `<a href="#pptid-${i + 1}" class="inner-circle">${i + 1}</a>`
-//         }
-//         document.getElementById('pptImgSec').innerHTML = htmlTag;
-//         document.getElementById('pptASec').innerHTML = aTag;
-//     }
-// )()

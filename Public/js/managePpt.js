@@ -1,4 +1,4 @@
-let urlVal='http://localhost:2800';
+let urlVal = 'http://localhost:2800';
 // let urlVal='https://presentation.awlinternational.com';
 
 let globalVar;
@@ -6,8 +6,7 @@ let globalVar;
 let pptid = localStorage.getItem('pptId');
 (
     async function generateable() {
-        // const dakbj = await fetch(`https://presentation.awlinternational.com/api/getOnePresentation/${pptid}`, {
-            const dakbj = await fetch(`${urlVal}/api/getOnePresentation/${pptid}`, {
+        const dakbj = await fetch(`${urlVal}/api/getOnePresentation/${pptid}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -74,7 +73,6 @@ const handleSaveChanges = async () => {
     globalVar.presentationImg = imageCollection;
 
     const updateData = await fetch(`${urlVal}/api/updatePpt`, {
-    // const updateData = await fetch('https://presentation.awlinternational.com/api/updatePpt', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -114,7 +112,6 @@ const handleGenerateUuid = async () => {
 
     const pptTitleData = { pptId: globalVar.pptId, customerName: cust_name }
     const generateUuid = await fetch(`${urlVal}/api/addUuId`, {
-    // const generateUuid = await fetch('https://presentation.awlinternational.com/api/addUuId', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -131,7 +128,6 @@ const handleGenerateUuid = async () => {
 const handleDeleteUuid = async (id) => {
     const pptTitleData = { pptId: globalVar.pptId, uuId: id }
     const generateUuid = await fetch(`${urlVal}/api/deleteUuId`, {
-    // const generateUuid = await fetch('https://presentation.awlinternational.com/api/deleteUuId', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -147,8 +143,6 @@ const handleDeleteUuid = async (id) => {
 const handleDeleteImg = async (img_name) => {
     const pptTitleData = { pptId: globalVar.pptId, img: img_name }
     const generateUuid = await fetch(`${urlVal}/api/deleteImage`, {
-    // const generateUuid = await fetch('https://presentation.awlinternational.com/api/deleteImage', {
-        // method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
@@ -163,12 +157,10 @@ const handleDeleteImg = async (img_name) => {
 
 
 const handleCopyUrl = async () => {
-
     // let copyText= document.getElementById('ppuurl');
     // // copyText.select();AbstractRange(0,99999);
     // navigator.clipboard.writeText(copyText.innerHTML);
     // alert('URL Copied')
-
 
     var selection = window.getSelection();
     var emailLink = document.querySelector('#ppuurl');

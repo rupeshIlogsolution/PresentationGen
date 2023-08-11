@@ -3,13 +3,8 @@ let urlVal = 'http://localhost:2800';
 
 let globalVar;
 
+// --------------------- Handle Copy URL ----------------------------------
 const handleCopyUrl = async () => {
-    // let copyText= document.getElementById('ppuurl');
-    // // copyText.select();AbstractRange(0,99999);
-    // navigator.clipboard.writeText(copyText.innerHTML);
-    // alert('URL Copied')
-
-
     var selection = window.getSelection();
     var emailLink = document.querySelector('#ppuurl');
 
@@ -22,11 +17,28 @@ const handleCopyUrl = async () => {
         .then(() => alert('URL Copied successful'))
         .catch(err => alert('URL Copied failed'));
 }
+// ---------------------- Handle Generate UUid ------------------------------
+const handleGenerateUuid = async () => {
+    const cust_name = document.getElementById('cust_name').value;
+
+    const pptTitleData = { pptId: globalVar.pptId, customerName: cust_name }
+    const generateUuid = await fetch(`${urlVal}/api/addVideoUuId`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pptTitleData)
+    })
+    const responseData = await generateUuid.json();
+    if (responseData.status === 'Success') {
+        alert('Uuid Generated');
+        window.location.reload();
+    }
+}
 
 let pptid = localStorage.getItem('videoPptId');
 (
     async function generateable() {
-        // const dakbj = await fetch(`https://presentation.awlinternational.com/api/getOnePresentation/${pptid}`, {
         const dakbj = await fetch(`${urlVal}/api/getOneVideoPresentation/${pptid}`, {
             headers: {
                 'Accept': 'application/json',
@@ -35,28 +47,9 @@ let pptid = localStorage.getItem('videoPptId');
             }
         })
         const jk = await dakbj.json()
-        console.log(jk)
         if (!jk.title) { window.location.href = '/login'; return 0 }
         globalVar = jk
         document.getElementById('pptTitle').innerHTML = jk.title;
-        // document.getElementById('pptTitleinp').value = jk.pptId;
-
-        // let html = '';
-        // for (let i = 0; i < jk.presentationImg.length; i++) {
-        //     html = html + `<tr class='childDiv' id=${i} style='cursor:move;'>`;
-        //     for (let j = 0; j < 1; j++) {
-        //         html = html + `<th scope='row'>${i + 1}</t > `;
-        //         html = html + `<td>${jk.presentationVideo}</td >`;
-        //         html = html + `<td class='action_td'>
-        //         <div class='image_preview'> <img src='../image/Uploaded/${jk.presentationImg[i]}'/></div>
-        //         <div class='delete_icons'  onclick=handleDeleteImg(\'${jk.presentationImg[i]}\')>
-        //         <img src='https://lh3.googleusercontent.com/G2jzG8a6-GAA4yhxx3XMJfPXsm6_pluyeEWKr9I5swUGF62d2xo_Qg3Kdnu00HAmDQ' alt='Delete Icons'/>
-        //             </div>
-        //         </td>`;
-        //     }
-        //     html = html + ' </tr>';
-        // }
-        // document.getElementById('table_body').innerHTML = html;
 
         let uuIdTable = '';
 
@@ -83,93 +76,9 @@ let getData = new Sortable(dragArea, {
 });
 
 
-// const handleSaveChanges = async () => {
-//     const trdata = document.getElementsByClassName('childDiv');
-//     let arr = Object.keys(trdata);
-//     let imageCollection = []
-
-//     arr.map((i) => {
-//         imageCollection.push(globalVar.presentationImg[trdata[i].id])
-//     });
-
-//     globalVar.presentationImg = imageCollection;
-
-//     const updateData = await fetch(`${urlVal}/api/updatePpt`, {
-//     // const updateData = await fetch('https://presentation.awlinternational.com/api/updatePpt', {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify(globalVar)
-//     })
-//     const responseData = await updateData.json();
-//     if (responseData.Message === 'Done') {
-//         alert('Changes are Saved');
-//         window.location.reload();
-//     }
-// }
-
-
-// const handleToggleSection = (btnType) => {
-//     if (btnType === 'url') {
-//         document.getElementById('imgBtn').style.display = 'inline'
-//         document.getElementById('gene_url_btn').style.display = 'inline'
-//         document.getElementById('url_sec').style.display = 'block'
-//         document.getElementById('urlBtn').style.display = 'none'
-//         document.getElementById('add_img_btn').style.display = 'none'
-//         document.getElementById('img_sec').style.display = 'none'
-//     }
-//     if (btnType === 'image') {
-//         document.getElementById('imgBtn').style.display = 'none'
-//         document.getElementById('gene_url_btn').style.display = 'none'
-//         document.getElementById('url_sec').style.display = 'none'
-//         document.getElementById('urlBtn').style.display = 'inline'
-//         document.getElementById('add_img_btn').style.display = 'inline'
-//         document.getElementById('img_sec').style.display = 'block'
-//     }
-// }
-
-
-const handleGenerateUuid = async () => {
-    const cust_name = document.getElementById('cust_name').value;
-
-    const pptTitleData = { pptId: globalVar.pptId, customerName: cust_name }
-    const generateUuid = await fetch(`${urlVal}/api/addUuId`, {
-        // const generateUuid = await fetch('https://presentation.awlinternational.com/api/addUuId', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(pptTitleData)
-    })
-    const responseData = await generateUuid.json();
-    if (responseData.status === 'Success') {
-        alert('Uuid Generated');
-        window.location.reload();
-    }
-}
-
-// const handleDeleteUuid = async (id) => {
-//     const pptTitleData = { pptId: globalVar.pptId, uuId: id }
-//     const generateUuid = await fetch(`${urlVal}/api/deleteUuId`, {
-//     // const generateUuid = await fetch('https://presentation.awlinternational.com/api/deleteUuId', {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify(pptTitleData)
-//     })
-//     const responseData = await generateUuid.json();
-//     if (responseData.status === 'Success') {
-//         alert('Uuid Deleted');
-//         window.location.reload();
-//     }
-// }
 const handleDeleteImg = async (img_name) => {
     const pptTitleData = { pptId: globalVar.pptId, img: img_name }
     const generateUuid = await fetch(`${urlVal}/api/deleteImage`, {
-        // const generateUuid = await fetch('https://presentation.awlinternational.com/api/deleteImage', {
-        // method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
@@ -181,5 +90,3 @@ const handleDeleteImg = async (img_name) => {
         window.location.reload();
     }
 }
-
-

@@ -18,38 +18,14 @@
         <a href="/videoDashboard"><button class="btn btn-secondary" id="back_btn">Back</button></a>
         <h1 id="pptTitle" class="text-center managePpt_title"></h1>
         <div class="">
-            <!-- <button class="btn btn-danger mx-3" id="urlBtn" onclick="handleToggleSection('url')">Manage URL</button> -->
-            <!-- <button class="btn btn-danger mx-3" id="imgBtn" style="display:none;"
-                onclick="handleToggleSection('image')">Manage Image</button> -->
-            <!-- <button class="btn btn-success" id="add_img_btn" data-toggle="modal" data-target="#addImageModal">Add Image
-                +</button> -->
-            <button class="btn btn-success" id="gene_url_btn"  data-toggle="modal"
+            <button class="btn btn-success" id="gene_url_btn" data-toggle="modal"
                 data-target="#generateUUidModal">Generate Url</button>
         </div>
     </nav>
     <!-- Navbar -->
 
-    <!-- <section id="img_sec">
-        <h1 class="text-center ">Manage Images</h1>
-        <div class="wrapper" id="parent_div">
-            <table class="table">
-                <thead class="">
-                    <tr>
-                        <th>Sno</th>
-                        <th>Image Name</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="table_body"></tbody>
-            </table>
-            <div class="manage_card_footer d-flex justify-content-between">
-                <small class="text-danger">Drag and Drop to arrange Images. </small>
-                <button class="btn btn-success" onclick="handleSaveChanges()">Sava Changes</button>
-            </div>
-        </div>
-    </section> -->
 
-    <section class="generate_url" id="url_sec" >
+    <section class="generate_url" id="url_sec">
         <h1 class="text-center ">Manage Url</h1>
         <div class="wrapper overflow-auto">
             <table class="table ">
@@ -66,34 +42,6 @@
         </div>
     </section>
 
-    <!-- Add Image -->
-    <!-- <div class="modal fade" id="addImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Add Image</h5>
-                    <button type="button" class="close bg-transparent border-0" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formElem" method="POST" action="/api/addimg" enctype="multipart/form-data">
-                        <div class="form-outline">
-                            <input type="hidden" id="pptTitleinp" class="form-control form-control-lg" name="title" />
-                        </div>
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="pptFile">Upload Images</label>
-                            <input type="file" id="pptFile" class="form-control form-control-lg" name="presentationImg"
-                                multiple accept="image/*" />
-                            <small class="text-danger">Maximum 40 Images will be Upload at a time.</small>
-                        </div>
-                        <input type="submit" class="btn btn-success float-right" value="Add +">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <!-- Generate Uuid Modal -->
     <div class="modal fade" id="generateUUidModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">

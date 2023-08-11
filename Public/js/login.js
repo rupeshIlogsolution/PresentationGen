@@ -7,7 +7,6 @@ const handleLogin = async () => {
     const pass = document.getElementById('password').value;
 
     const data = { userid, pass }
-    // const response = await fetch(`https://presentation.awlinternational.com/api/verifyuser`, {
     const response = await fetch(`${urlVal}/api/verifyuser`, {
         method: "POST",
         headers: {
