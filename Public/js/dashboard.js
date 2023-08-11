@@ -1,6 +1,6 @@
 let globalVar;
-// let urlVal='http://localhost:2800';
-let urlVal='https://presentation.awlinternational.com';
+let urlVal='http://localhost:2800';
+// let urlVal='https://presentation.awlinternational.com';
 (
     async function getAllData() {
         const dakbj = await fetch(`${urlVal}/api/getAllPresentation`,

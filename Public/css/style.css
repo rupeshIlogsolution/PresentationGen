@@ -295,3 +295,14 @@ body {
   white-space: nowrap;
   overflow: hidden;
 }
+
+/* ----------------------------------- Video Dashboard ---------------------------------------- */
+.presentation_tag_name{
+  width: 96%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.video_small_tag {
+  font: 18px bold;
+}
