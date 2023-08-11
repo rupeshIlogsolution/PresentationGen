@@ -36,6 +36,25 @@ const handleGenerateUuid = async () => {
     }
 }
 
+// ----------------- Handle Delete UUID -----------------------------
+
+const handleDeleteUuid = async (id) => {
+    const pptTitleData = { pptId: globalVar.pptId, uuId: id }
+    const generateUuid = await fetch(`${urlVal}/api/deleteVideoUuId`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pptTitleData)
+    })
+    const responseData = await generateUuid.json();
+    if (responseData.status === 'Success') {
+        alert('Uuid Deleted');
+        window.location.reload();
+    }
+}
+
+
 let pptid = localStorage.getItem('videoPptId');
 (
     async function generateable() {

@@ -49,3 +49,23 @@ const handleLogout = () => {
     localStorage.clear();
     window.location.href = './login'
 }
+const handleDeletePPt = async (pptId) => {
+    const dakbj = await fetch(`${urlVal}/api/deleteVideoPresentation`,
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'userId': localStorage.getItem('userId'),
+                'pptId': pptId
+            }
+        })
+
+    const jk = await dakbj.json()
+    if (jk.statusMssg === "success") {
+        alert(jk.Message);
+        window.location.reload();
+    }
+    else {
+        alert(jk.Message);
+    }
+}

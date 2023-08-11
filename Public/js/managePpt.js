@@ -143,6 +143,7 @@ const handleDeleteUuid = async (id) => {
 const handleDeleteImg = async (img_name) => {
     const pptTitleData = { pptId: globalVar.pptId, img: img_name }
     const generateUuid = await fetch(`${urlVal}/api/deleteImage`, {
+        method:"POST",
         headers: {
             "Content-Type": "application/json"
         },

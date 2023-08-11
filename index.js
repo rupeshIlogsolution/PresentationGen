@@ -23,10 +23,6 @@ app.use('/js', express.static(path.resolve(__dirname + '/Public/js')))
 app.use('/image', express.static(path.resolve(__dirname + '/Public/image')))
 app.use('/video', express.static(path.resolve(__dirname + '/Public/video')))
 
-// app.use((req,res,next)=>{
-//     console.log(req.url)
-//     next();
-// })
 let imageArr = []
 const uploadImg = multer({
     storage: multer.diskStorage({
@@ -41,6 +37,10 @@ const uploadImg = multer({
     })
 
 }).array("presentationImg", 40)
+
+
+// --------------- Video Multer ------------------------ 
+
 let videoName = '';
 const uploadVideo = multer({
     storage: multer.diskStorage({
@@ -48,7 +48,6 @@ const uploadVideo = multer({
             cb(null, "./Public/video")
         },
         filename: function (req, file, cb) {
-            console.log(file.originalname)
             let filename = file.originalname + "-" + Date.now() + ".mp4"
             videoName = filename
             cb(null, filename)
@@ -185,23 +184,23 @@ app.post("/api/uploadvideo", (req, res) => {
             res.status(200).send("<script>alert('Some thing went wrong');window.location.href='/dashboard'</script>");
         }
         else {
-            //     let pptIndex;
-            //     for (let i = 1; i <= pptData.allPresentation.length; i++) {
-            //         if (req.body.title === pptData.allPresentation[i - 1].title) { pptIndex = i }
-            //     }
-            //     if (!pptIndex) {
-            let newUuid = uuidv4();
-            let randomId = (req.body.title.substring(0, 3)).toUpperCase() + Math.floor(Math.random() * 10000);
-            let newObj = { pptId: randomId, "title": req.body.title, "presentationVideo": videoName, "uuId": [{ "cust_name": 'default', "uuid": newUuid }] }
-            videoPPt.allVideoPresentation.push(newObj)
-            const filepath = path.resolve(__dirname) + '/videoPresentation.json';
-            fs.writeFileSync(filepath, JSON.stringify(videoPPt))
-            videoName = ''
-            res.status(200).send("<script>alert('PPT Created');window.location.href='/videoDashboard'</script>");
-            //     }
-            //     else {
-            //         res.status(400).send("<script>alert('This Presentation Title is Already Exist.');window.location.href='/dashboard'</script>");
-            //     }
+            let pptIndex;
+            for (let i = 1; i <= videoPPt.allVideoPresentation.length; i++) {
+                if (req.body.title === videoPPt.allVideoPresentation[i - 1].title) { pptIndex = i }
+            }
+            if (!pptIndex) {
+                let newUuid = uuidv4();
+                let randomId = (req.body.title.substring(0, 3)).toUpperCase() + Math.floor(Math.random() * 10000);
+                let newObj = { pptId: randomId, "title": req.body.title, "presentationVideo": videoName, "uuId": [{ "cust_name": 'default', "uuid": newUuid }] }
+                videoPPt.allVideoPresentation.push(newObj)
+                const filepath = path.resolve(__dirname) + '/videoPresentation.json';
+                fs.writeFileSync(filepath, JSON.stringify(videoPPt))
+                videoName = ''
+                res.status(200).send("<script>alert('PPT Created');window.location.href='/videoDashboard'</script>");
+            }
+            else {
+                res.status(400).send("<script>alert('This Presentation Title is Already Exist.');window.location.href='/videoDashboard'</script>");
+            }
         }
     })
 
@@ -242,7 +241,6 @@ app.get("/api/getAllPresentation", (req, res) => {
         let jsonData;
         fs.readFile("./allPPt.json", "utf-8", (err, data) => {
             jsonData = JSON.parse(data);
-            console.log(jsonData)
             res.status(200).send(jsonData);
         })
     }
@@ -330,6 +328,31 @@ app.get("/api/deletePresentation/", (req, res) => {
     }
 })
 
+app.get("/api/deleteVideoPresentation/", (req, res) => {
+    let validUser = false;
+    for (let i = 1; i <= data.userData.length; i++) {
+        if (req.headers.userid === data.userData[i - 1].useId || req.headers.userid === 'default') { validUser = true }
+    }
+    if (validUser) {
+        let pptIndex;
+        for (let i = 1; i <= videoPPt.allVideoPresentation.length; i++) {
+            if (req.headers.pptid === videoPPt.allVideoPresentation[i - 1].pptId) { pptIndex = i }
+        }
+        if (pptIndex) {
+            let tempPptJson = videoPPt;
+            tempPptJson.allVideoPresentation.splice((pptIndex - 1), 1);
+            const filepath = path.resolve(__dirname) + '/videoPresentation.json';
+            fs.writeFileSync(filepath, JSON.stringify(tempPptJson))
+            res.status(200).send({ statusMssg: 'success', Message: 'Presentation Deleted' });
+        }
+        else {
+            res.status(400).send("<script>alert('Invalid ppt');window.location.href='/dashboard'</script>");
+        }
+    }
+    else {
+        res.status(401).send({ Message: 'Unauthorized User' });
+    }
+})
 app.post("/api/deleteImage", (req, res) => {
     let pptIndex;
     for (let i = 1; i <= pptData.allPresentation.length; i++) {
@@ -405,6 +428,28 @@ app.post("/api/deleteUuId", (req, res) => {
     }
     else {
         res.status(400).send("<script>alert('Error');window.location.href='/managePresentation'</script>");
+    }
+})
+
+app.post("/api/deleteVideoUuId", (req, res) => {
+    let pptIndex;
+    for (let i = 1; i <= videoPPt.allVideoPresentation.length; i++) {
+        if (req.body.pptId === videoPPt.allVideoPresentation[i - 1].pptId) { pptIndex = i }
+    }
+    if (pptIndex) {
+        let uuidIndex;
+        let newArr = [...videoPPt.allVideoPresentation[pptIndex - 1].uuId]
+        for (let j = 0; j < videoPPt.allVideoPresentation[pptIndex - 1].uuId.length; j++) {
+            if (req.body.uuId === videoPPt.allVideoPresentation[pptIndex - 1].uuId[j].uuid) { uuidIndex = j }
+        }
+        newArr.splice(uuidIndex, 1);
+        videoPPt.allVideoPresentation[pptIndex - 1].uuId = newArr
+        const filepath = path.resolve(__dirname) + '/videoPresentation.json';
+        fs.writeFileSync(filepath, JSON.stringify(videoPPt))
+        res.status(200).send({ status: 'Success' });
+    }
+    else {
+        res.status(400).send("<script>alert('Error');window.location.href='/manageVideoPresentation'</script>");
     }
 })
 app.post('/api/updatePpt', (req, res) => {
